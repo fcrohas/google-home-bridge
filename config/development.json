@@ -1,0 +1,100 @@
+{
+	"oauth2" : {
+		"client_id":"658XnbUtGN2axv34t8EOhZxgeR8OmagQBWnLsR7IMj9UtK2Wra2i6R4GJ9yiLcQR0ZKnJuG5Uxbqjo9Fx",
+		"project_id":"homecontrol-3df77"
+	},
+	"devices" : [
+    	{
+         "config": {
+    	   "driver": "Television"
+	 }
+        },
+        {
+         "config": {
+    	   "driver": "Commutateur"
+         }
+        },
+        {
+         "config": {
+    	   "driver": "Homecine"
+         }
+        },
+        {
+         "config": {
+    	   "driver": "PS4"
+         }
+        },
+        {
+         "config": {
+    	   "driver": "Capteur de temperature",
+           "host": "192.168.2.4",
+           "port": "8123",
+	   "sensorName": "temperature_salon_temperature",
+	   "room":"Salon"
+         }
+        },
+        {
+         "config": {
+    	   "driver": "Capteur de temperature",
+           "host": "192.168.2.4",
+           "port": "8123",
+	   "sensorName": "temperature_chambre_bebe_temperature",
+	   "room":"Chambre du Bebe"
+         }
+        },
+        {
+         "config": {
+    	   "driver": "Capteur de temperature",
+           "host": "192.168.2.4",
+           "port": "8123",
+	   "sensorName": "temperature_chambre_parent_temperature",
+	   "room":"notre Chambre"
+         }
+        },
+        {
+         "config": {
+    	   "driver": "Capteur de temperature",
+           "host": "192.168.2.4",
+           "port": "8123",
+	   "sensorName": "temperature_veranda_temperature",
+	   "room":"Veranda"
+         }
+        },
+        {
+         "config": {
+    	   "driver": "Capteur de fenetre",
+           "host": "192.168.2.4",
+           "port": "8123",
+	   "sensorName": "fenetre_bureau_sensor_status",
+	   "room":"Bureau"
+         }
+        },
+        {
+         "config": {
+    	   "driver": "Capteur de fenetre",
+           "host": "192.168.2.4",
+           "port": "8123",
+	   "sensorName": "fenetre_salon_sensor_status",
+	   "room":"Salon"
+         }
+        },
+        {
+         "config": {
+    	   "driver": "Capteur de fenetre",
+           "host": "192.168.2.4",
+           "port": "8123",
+	   "sensorName": "fenetre_chambre_3_sensor_status",
+	   "room":"Chambre du Bebe"
+         }
+        },
+        {
+         "config": {
+    	   "driver": "Capteur de fenetre",
+           "host": "192.168.2.4",
+           "port": "8123",
+	   "sensorName": "fenetre_chambre_1_sensor_status",
+	   "room":"notre chambre"
+         }
+        }
+        ]
+}

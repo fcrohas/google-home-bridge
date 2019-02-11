@@ -1,0 +1,171 @@
+const Device = require('../device');
+const xml2js = require('xml2js');
+
+class LiveboxTVDevice extends Device {
+
+	constructor(id, config)	{
+		super();
+		this.id = id;
+		this.config = config;
+		this.baseURI = 'http://'+config.host+':'+config.port;
+		this.reader = null;
+		this.config = {};
+		this.info = {};
+		this.keycode = [
+			{value : 116, name: 'ON/OFF'},
+			{value : 512, name:'0'},
+			{value : 513, name:'1'},
+			{value : 514, name:'2'},
+			{value : 515, name:'3'},
+			{value : 516, name:'4'},
+			{value : 517, name:'5'},
+			{value : 518, name:'6'},
+			{value : 519, name:'7'},
+			{value : 520, name:'8'},
+			{value : 521, name:'9'},
+			{value : 402, name:'CH+'},
+			{value : 403, name:'CH-'},
+			{value : 115, name:'VOL+'},
+			{value : 114, name:'VOL-'},
+			{value : 113, name:'MUTE'},
+			{value : 103, name:'UP'},
+			{value : 108, name:'DOWN'},
+			{value : 105, name:'LEFT'},
+			{value : 116, name:'RIGHT'},
+			{value : 352, name:'OK'},
+			{value : 158, name:'BACK'},
+			{value : 139, name:'MENU'},
+			{value : 164, name:'PLAY/PAUSE'},
+			{value : 168, name:'FBWD'},
+			{value : 159, name:'FFWD'},
+			{value : 167, name:'REC'},
+			{value : 393, name:'VOD'},
+		];
+	}
+	
+	static getDriverName() {
+		return 'LiveboxTV';
+	}
+
+	static getDevices() {
+	  // load config
+	  const node_config = process.env.NODE_ENV || 'development';
+	  const config = require('config-node')({
+	    dir: 'config', // where to look for files  
+	    ext: null, // spoil the fun, tell me which one it is ('' for directory). Improves performance. 
+	    env: node_config // set which one instead of smart defaults 
+	  });
+	  // Detect livebox
+	  var devices = [];
+	  // Get setup devices
+	  const liveboxDevices = config.devices.filter(device => device.config.driver == 'LiveboxTV');
+	  // Create device reference
+	  for (var i=0; i<liveboxDevices.length; i++) {
+	  	const device = liveboxDevices[i];
+		devices['livebox-'+i] = new LiveboxTVDevice('livebox-'+i, device.config);
+		console.log('Added device with serial livebox-'+i);
+	  }
+	  return devices;
+	}
+
+	setConfig(config) {
+		this.config = config;
+	}
+
+	getInformation(callback) {
+		// Retrieve information
+		const descriptionURI = '/BasicDeviceDescription.xml';
+		const uri = this.baseURI+descriptionURI;
+		// http get with params
+		this.httpGet(uri, (data) => {
+			var parser = new xml2js.Parser();
+			parser.parseString(data,(err,result) => {
+				const description = result.root.device;
+				callback({
+					id: this.id,
+		        	type: "action.devices.types.SWITCH",
+		        	traits: ["action.devices.traits.OnOff"],
+		        	name : {
+		        		defaultNames : [description[0].friendlyName[0]],
+		        		name: "Livebox TV",
+		        		nicknames: ["Livebox"]
+		        	},
+		        	willReportState : true,
+		        	roomHint :"Salon",
+					deviceInfo: {
+			        	manufacturer : description[0].manufacturer[0],
+			        	model: description[0].modelName[0],
+			        	hwVersion : "4"
+			        }
+				});
+			});
+		});
+	}
+
+	getStatus(callback) {
+		const statusURI = '/remoteControl/cmd?operation=10';
+		const uri = this.baseURI+statusURI;
+		this.httpGet(uri, (data) => {
+			const status = data.result.data.activeStandbyState == 0 ? true:false;
+			callback(status);
+		});
+	}
+
+	sendCommand(action, value, callback) {
+		const commandURI = '/remoteControl/cmd?operation=01&key=%1&mode=0';
+		const uri = this.baseURI+commandURI.replace("%1",action);
+		this.httpGet(uri, (data) => {
+			if (callback!=null) {
+				callback("SUCCESS");
+			}
+		});
+	}
+
+	getType() {
+		return 'TV';
+	}
+
+	getName() {
+		return 'Orange Livebox TV';
+	}
+
+	getSerial() {
+		return 'XXXXXXXXXX01';
+	}
+
+	getDevice() {
+		return this.device;		
+	}
+
+	open() {
+		console.log('Device opened.');
+	}
+
+	close() {
+		console.log('Device closed.');
+	}
+
+	start() {
+		console.log('Power on.');
+		this.sendCommand(116,null);
+	}
+
+	stop() {
+		console.log('Power off.');
+		this.sendCommand(116,null);
+	}
+
+	listen(callback) {
+		if (this.reader != null) {
+			this.reader.on('message', (event) => {
+				const floatarr = new Float32Array(event.length);
+				for(let i = 0; i < event.length; i++) {
+					floatarr[i] = event.data[i];
+				}
+				callback(floatarr);
+			});
+		}
+	}
+}
+
+module.exports= LiveboxTVDevice;

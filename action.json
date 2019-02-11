@@ -1,0 +1,85 @@
+{
+  "locale":"fr",
+  "actions": [
+  {
+    "name": "actions.devices",
+    "deviceControl": {
+    },
+    "fulfillment": {
+      "conversationName": "automation"
+    }
+  },
+  {
+    "description": "Majordome Intent",
+    "name": "MAIN",
+    "fulfillment": {
+      "conversationName": "Majordome"
+    },
+    "intent": {
+      "name": "actions.intent.MAIN",
+      "trigger": {
+        "queryPatterns": [
+          "Parler avec notre majordome",
+          "Dire a notre majordome"
+        ]
+      }
+    }
+  },
+  {
+    "description": "Channel Intent",
+    "name": "CHANNEL",
+    "fulfillment": {
+      "conversationName": "Majordome"
+    },
+    "intent": {
+      "name": "biz.linuxgeek.CHANNEL",
+      "parameters" : [
+        {"name":"chanstr","type":"org.schema.type.Text"},
+        {"name":"channum","type":"org.schema.type.Number"}
+      ],
+      "trigger": {
+        "queryPatterns": [
+          "Mettre $org.schema.type.Text:chanstr",
+          "Changer de chaine pour $org.schema.type.Text:chanstr",
+          "Mettre la $org.schema.type.Number:channum"
+        ]
+      }
+    }
+  },
+  {
+    "description": "Volume Intent",
+    "name": "VOLUME",
+    "fulfillment": {
+      "conversationName": "Majordome"
+    },
+    "intent": {
+      "name": "biz.linuxgeek.VOLUME",
+      "parameters" : [
+        {"name":"volup","type":"org.schema.type.Number"},
+        {"name":"voldown","type":"org.schema.type.Number"}
+      ],
+      "trigger": {
+        "queryPatterns": [
+          "Monter le volume",
+          "Baisser le volume",
+          "Monter le volume de $org.schema.type.Number:volup",
+          "Baisser le volume de $org.schema.type.Number:voldown",
+          "Mettre en soudine",
+          "Mettre sur muet",
+          "Remettre le son",
+          "Couper le son"
+        ]
+      }
+    }
+  }],
+  "conversations": {
+    "automation" : {
+      "name": "automation",
+      "url": "https://<VALID HOSTNAME WITH DOMAIN>/homecontrol"
+    },
+    "Jarvis": {
+      "name": "Majordome",
+      "url": "https://<VALID HOSTNAME WITH DOMAIN>/jarvis/welcome"
+    }
+  }
+}
