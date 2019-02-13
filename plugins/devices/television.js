@@ -131,15 +131,6 @@ class TelevisionDevice extends Device {
 	}
 
 	listen(callback) {
-		if (this.reader != null) {
-			this.reader.on('message', (event) => {
-				const floatarr = new Float32Array(event.length);
-				for(let i = 0; i < event.length; i++) {
-					floatarr[i] = event.data[i];
-				}
-				callback(floatarr);
-			});
-		}
 	}
 }
 

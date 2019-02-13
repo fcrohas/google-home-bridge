@@ -82,7 +82,6 @@ class HAWindowSensorDevice extends Device {
 	}
 
 	sendCommand(action, value, callback) {
-	    console.log(action);
             switch(action) {
 	      case "POWER" : 
                   // infra red switch
@@ -117,24 +116,13 @@ class HAWindowSensorDevice extends Device {
 
 	start() {
 		console.log('Power on.');
-		//this.sendCommand("POWER",null);
 	}
 
 	stop() {
 		console.log('Power off.');
-		//this.sendCommand("POWER",null);
 	}
 
 	listen(callback) {
-		if (this.reader != null) {
-			this.reader.on('message', (event) => {
-				const floatarr = new Float32Array(event.length);
-				for(let i = 0; i < event.length; i++) {
-					floatarr[i] = event.data[i];
-				}
-				callback(floatarr);
-			});
-		}
 	}
 }
 

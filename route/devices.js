@@ -100,6 +100,9 @@ devices.getRouter().post('/', function(req,res,next) {
           	 				device.stop();
           	 			}
           	 			break;
+          	 		case "action.devices.commands.GetCameraStream":
+					states.cameraStreamAccessUrl = "http://192.168.2.149/mpeg-dash/manifest.mpd";
+					break;
                                 default:
                                     device.execute(execution.command, execution.params);
           	 	}

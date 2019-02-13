@@ -117,6 +117,10 @@ class HomecineDevice extends Device {
 		console.log('Power off.');
 		this.sendCommand("POWER",null);
 	}
+
+	listen(callback) {
+
+        }
 }
 
 module.exports= HomecineDevice;
